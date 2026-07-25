@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+bughunter.db
+*.db-journal
+venv/
+.venv/
