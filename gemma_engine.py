@@ -1,5 +1,5 @@
 import json
-import google.generativeai as genai
+from google import genai
 from prompts import (
     SEVERITY_PROMPT, CATEGORY_PROMPT, FIX_SUGGESTION_PROMPT,
     URDU_TRANSLATION_PROMPT, RISK_SCORE_PROMPT
@@ -8,11 +8,13 @@ from prompts import (
 
 class GemmaEngine:
     def __init__(self, api_key: str):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-2.0-flash")
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.0-flash"
 
     def _generate(self, prompt: str) -> str:
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model=self.model, contents=prompt
+        )
         return response.text
 
     def _parse_json(self, text: str) -> dict:

@@ -190,14 +190,12 @@ def search_dashboard(query):
     return html
 
 
-with gr.Blocks(
-    title="BugHunter PK - AI-Powered Bug Bounty Platform",
-    theme=gr.themes.Soft(),
-    css="""
-    .main-title { text-align:center; color:#e0e0e0; margin-bottom:0 }
-    .subtitle { text-align:center; color:#aaa; margin-top:0 }
-    """
-) as app:
+CUSTOM_CSS = """
+.main-title { text-align:center; color:#e0e0e0; margin-bottom:0 }
+.subtitle { text-align:center; color:#aaa; margin-top:0 }
+"""
+
+with gr.Blocks(title="BugHunter PK - AI-Powered Bug Bounty Platform") as app:
     gr.Markdown("# BugHunter PK", elem_classes="main-title")
     gr.Markdown("AI-Powered Bug Bounty Platform for Pakistan | Powered by Gemma 4", elem_classes="subtitle")
 
@@ -248,11 +246,12 @@ with gr.Blocks(
             submit_btn = gr.Button("Submit & Analyze with Gemma 4", variant="primary", size="lg")
             submit_status = gr.Markdown()
             analysis_output = gr.Markdown()
+            stats_after_submit = gr.Markdown(value=get_stats_display())
 
             submit_btn.click(
                 fn=submit_report,
                 inputs=[title, reporter, org, description, steps, language],
-                outputs=[analysis_output, submit_status, get_stats_display()],
+                outputs=[analysis_output, submit_status, stats_after_submit],
             )
 
         with gr.Tab("Dashboard"):
@@ -276,4 +275,4 @@ with gr.Blocks(
 
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", server_port=7860, share=True)
+    app.launch(server_name="0.0.0.0", server_port=7860, share=True, theme=gr.themes.Soft(), css=CUSTOM_CSS)
